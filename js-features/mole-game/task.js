@@ -1,32 +1,45 @@
-const holes = document.querySelectorAll('.hole');
-const dead = document.getElementById('dead');
-const lost = document.getElementById('lost');
-let counterHit = dead.textContent;
-let counterMiss = lost.textContent;
+const getHole = index => document.getElementById(`hole${index}`);
+let score = 0;
+let losses = 0;
 
-holes.forEach((hole) => {
-  hole.addEventListener('click', () => {
-    if(hole.classList.contains('hole_has-mole')) {
-        counterHit++;
-        dead.textContent = counterHit;
-        if(counterHit >= 10) {
-            alert('🏆 Вы победили! 🏆');
-            clearCounters();
-        }
-    } else {
-        counterMiss++;
-        lost.textContent = counterMiss;
-        if(counterMiss >= 5) {
-            alert('😖 Вы проиграли 😖');
-            clearCounters();
-        }
-    }
-  });
-});
-
-function clearCounters() {
-    counterMiss = 0;
-    counterHit = 0;
-    dead.textContent = counterHit;
-    lost.textContent = counterMiss;
+function updateStatus() {
+  document.getElementById('dead').innerText = score;
+  document.getElementById('lost').innerText = losses;
 }
+
+// Обработчик клика
+function onHoleClick(event) {
+  const hole = event.target;
+  if (hole.classList.contains('hole_has-mole')) {
+    score++;
+    if (score === 10) {
+      alert('🏆 Вы победили! 🏆');
+      score = 0;
+      losses = 0;
+    }
+  } else {
+    losses++;
+    if (losses === 5) {
+      alert('😖 Вы проиграли 😖');
+      score = 0;
+      losses = 0;
+    }
+  }
+
+  updateStatus();
+}
+
+// Обработчик клика для каждой лунки
+for (let i = 1; i <= 9; i++) {
+  getHole(i).addEventListener('click', onHoleClick);
+}
+
+// Функция запуска игры
+function startGame() {
+  score = 0;
+  losses = 0;
+  updateStatus();
+  next();
+}
+
+startGame();
