@@ -15,8 +15,17 @@ document.addEventListener('DOMContentLoaded', () => {
   function handleClick(event) {
     event.preventDefault();
 
+    // Если был клик по уже активной ссылке, то закрываем подсказку
+    if (activeTooltip && activeTooltip.link === event.target) {
+      activeTooltip.tooltip.remove();
+      activeTooltip = null;
+      document.removeEventListener('click', handleDocumentClick);
+      return;
+    }
+
+    // Удаляем предыдущую подсказку, если есть
     if (activeTooltip) {
-      activeTooltip.remove();
+      activeTooltip.tooltip.remove();
     }
 
     const tooltipElement = document.createElement('div');
@@ -28,7 +37,11 @@ document.addEventListener('DOMContentLoaded', () => {
     tooltipElement.style.left = linkCoords.left + 'px';
     tooltipElement.style.top = linkCoords.top + 'px';
     tooltipElement.classList.add('tooltip_active');
-    activeTooltip = tooltipElement;
+
+    activeTooltip = {
+      tooltip: tooltipElement,
+      link: event.target
+    };
 
     // Обработчик клика на документе для закрытия подсказки
     function handleDocumentClick(event) {
