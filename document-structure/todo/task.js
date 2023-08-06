@@ -3,15 +3,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const tasksList = document.getElementById("tasks__list");
     const addButton = document.getElementById("tasks__add");
   
-    // Добавление задач по нажатию Enter
-    taskInput.addEventListener("keypress", function (event) {
-      if (event.key === "Enter" && taskInput.value.trim() !== "") {
-        event.preventDefault();
-        addTask(taskInput.value.trim());
-        taskInput.value = "";
-      }
-    });
-
     // Добавление задачи по клику на кнопку
     addButton.addEventListener("click", function (event) {
       event.preventDefault();
